@@ -94,7 +94,7 @@ document.getElementById('socialArrowLeft')?.addEventListener('click', () => swit
 document.getElementById('socialArrowRight')?.addEventListener('click', () => switchSocialCat(1));
 
 // Init
-renderSocialCards();
+renderSocialCards;
 
 // 3D mouse tilt on hero image
 const heroImg = document.getElementById('heroImg');
@@ -119,3 +119,127 @@ window.addEventListener('load', () => {
     setTimeout(() => { bar.style.width = w; }, 300);
   });
 });
+
+
+/* ══════════════════════════════════════
+   LIVE ANIMATIONS JS
+══════════════════════════════════════ */
+
+// ── Cursor glow trail ──
+const glowEl = document.createElement('div');
+glowEl.id = 'cursor-glow';
+const trailEl = document.createElement('div');
+trailEl.id = 'cursor-trail';
+document.body.appendChild(glowEl);
+document.body.appendChild(trailEl);
+
+let trailX = 0, trailY = 0;
+document.addEventListener('mousemove', (e) => {
+  glowEl.style.left = e.clientX + 'px';
+  glowEl.style.top  = e.clientY + 'px';
+  // trail follows with slight lag
+  setTimeout(() => {
+    trailEl.style.left = e.clientX + 'px';
+    trailEl.style.top  = e.clientY + 'px';
+  }, 80);
+});
+
+// ── Scroll Reveal (IntersectionObserver) ──
+const revealEls = document.querySelectorAll(
+  '.skill-card, .about-body, .about-img-wrap, .about-text, .port-card, .port-tabs, .about-footer, .port-label'
+);
+
+// Add reveal classes
+document.querySelectorAll('.skill-card').forEach((el, i) => {
+  el.classList.add('reveal-scale');
+  el.classList.add('delay-' + Math.min((i % 4) + 1, 6));
+});
+document.querySelector('.about-text')?.classList.add('reveal-left');
+document.querySelector('.about-img-wrap')?.classList.add('reveal-right');
+document.querySelector('.about-footer')?.classList.add('reveal');
+document.querySelector('.port-label')?.classList.add('reveal');
+document.querySelector('.port-tabs')?.classList.add('reveal');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+  observer.observe(el);
+});
+
+// ── Typing effect on hero name ──
+const heroNameEl = document.querySelector('.hero-name-hover');
+if (heroNameEl) {
+  const fullText = 'ZARWA\nZULQARNAIN';
+  heroNameEl.innerHTML = '';
+  heroNameEl.classList.add('typing-cursor');
+  let i = 0;
+  const type = () => {
+    if (i < fullText.length) {
+      if (fullText[i] === '\n') {
+        heroNameEl.innerHTML = heroNameEl.innerHTML.replace('|', '') + '<br>';
+      } else {
+        heroNameEl.innerHTML = heroNameEl.innerHTML.replace('|', '') + fullText[i];
+      }
+      i++;
+      setTimeout(type, 80);
+    } else {
+      heroNameEl.classList.remove('typing-cursor');
+    }
+  };
+  setTimeout(type, 600);
+}
+
+// ── Navbar scrolled glow ──
+document.querySelectorAll('.navbar').forEach(nav => {
+  const panel = nav.closest('.panel');
+  if (!panel) return;
+  panel.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', panel.scrollTop > 10);
+  });
+});
+// also on window scroll
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.navbar').forEach(nav => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  });
+});
+
+// ── Skill bars animate when visible ──
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.skill-fill').forEach((bar, i) => {
+        const target = bar.getAttribute('data-width') || bar.style.width;
+        bar.setAttribute('data-width', target);
+        bar.style.width = '0';
+        setTimeout(() => { bar.style.width = target; }, 200 + i * 80);
+      });
+      skillObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.skills-grid').forEach(g => skillObserver.observe(g));
+
+// ── Port cards stagger on tab switch ──
+const origRender = renderSocialCards;
+window.renderSocialCards = function() {
+  origRender();
+  document.querySelectorAll('.port-card').forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    setTimeout(() => {
+      card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, i * 100);
+  });
+};
+// re-init with animation
+window.renderSocialCards();

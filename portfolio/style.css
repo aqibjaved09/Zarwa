@@ -822,3 +822,249 @@ body {
   transform-style: preserve-3d;
   perspective: 600px;
 }
+
+/* ══════════════════════════════════════
+   LIVE ANIMATIONS
+══════════════════════════════════════ */
+
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* stagger delay helpers */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+
+/* ── Typing cursor ── */
+.typing-cursor::after {
+  content: '|';
+  color: var(--cyan);
+  animation: blink 0.8s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Cursor glow trail ── */
+#cursor-glow {
+  position: fixed;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,229,204,0.7) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s, opacity 0.3s;
+  mix-blend-mode: screen;
+}
+#cursor-trail {
+  position: fixed;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+  transition: left 0.12s ease, top 0.12s ease;
+}
+
+/* ── Navbar scroll glow ── */
+.navbar.scrolled {
+  background: rgba(11,36,36,0.95);
+  box-shadow: 0 2px 20px rgba(0,229,204,0.12);
+  backdrop-filter: blur(8px);
+}
+
+/* ── Hero panel animated border ── */
+.hero-panel {
+  position: relative;
+}
+.hero-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--cyan), transparent, var(--cyan));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  animation: borderGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Skill icon pulse ── */
+.skill-card:hover .skill-icon {
+  animation: iconPulse 0.6s ease;
+}
+@keyframes iconPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); color: #fff; }
+  100% { transform: scale(1); }
+}
+
+/* ── Navbar link underline slide ── */
+.nav-links a:not(.nav-active) {
+  position: relative;
+}
+.nav-links a:not(.nav-active)::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 1.5px;
+  background: var(--cyan);
+  transition: width 0.25s ease, left 0.25s ease;
+  border-radius: 2px;
+}
+.nav-links a:not(.nav-active):hover::after {
+  width: 80%;
+  left: 10%;
+}
+
+/* ── Social card shimmer on hover ── */
+.port-card::before {
+  content: '';
+  position: absolute;
+  top: -100%; left: -60%;
+  width: 50%; height: 200%;
+  background: linear-gradient(105deg, transparent 40%, rgba(0,229,204,0.12) 50%, transparent 60%);
+  transform: skewX(-15deg);
+  transition: none;
+  pointer-events: none;
+  z-index: 2;
+}
+.port-card:hover::before {
+  animation: shimmer 0.6s ease forwards;
+}
+@keyframes shimmer {
+  0%   { left: -60%; }
+  100% { left: 130%; }
+}
+
+/* ── About image scan line ── */
+.about-img-wrap::before {
+  content: '';
+  position: absolute;
+  top: -100%; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--cyan), transparent);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+.about-img-wrap:hover::before {
+  animation: scanLine 1.2s ease forwards;
+  opacity: 1;
+}
+@keyframes scanLine {
+  0%   { top: -5%; }
+  100% { top: 105%; }
+}
+
+/* ── Panel entrance ── */
+.panel {
+  animation: panelIn 0.5s ease both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Glowing footer icons ── */
+.about-footer a {
+  position: relative;
+}
+.about-footer a::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,229,204,0.3), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.about-footer a:hover::after { opacity: 1; }
+
+/* ── Hero label-top typewriter line ── */
+.label-top {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typeIn 1.2s steps(30) 0.3s both;
+}
+@keyframes typeIn {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* ── Skill bar shimmer ── */
+.skill-fill {
+  position: relative;
+  overflow: hidden;
+}
+.skill-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.35), transparent);
+  animation: barShimmer 2.5s ease-in-out infinite;
+}
+@keyframes barShimmer {
+  0%   { left: -60%; }
+  100% { left: 130%; }
+}
+
+/* ── Background body pulse ── */
+body {
+  animation: bgPulse 8s ease-in-out infinite;
+}
+@keyframes bgPulse {
+  0%, 100% { background: #18a090; }
+  50%       { background: #14887e; }
+}
