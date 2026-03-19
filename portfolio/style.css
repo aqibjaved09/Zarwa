@@ -520,22 +520,67 @@ body {
   .hero-desc { max-width: 100%; }
   .login-input { flex: 1; width: auto; }
 
-  .navbar { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 20px; }
-  .nav-links { flex-wrap: wrap; gap: 6px; }
+  /* Navbar: brand on top, links below in a clean row */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+  .nav-links li { flex-shrink: 0; }
+  .nav-links a {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+    letter-spacing: 1px;
+  }
 
   .about-body { flex-direction: column; padding: 24px 20px; }
   .about-img-wrap { width: 100%; min-height: 220px; }
-  .about-footer { padding: 12px 20px; flex-wrap: wrap; }
+  .about-footer { padding: 12px 20px; flex-wrap: wrap; gap: 10px; }
 
   .port-label { padding: 12px 20px; }
-  .port-slider { padding: 20px 6px; gap: 6px; }
-  .port-cards { gap: 10px; }
-  .port-card { width: 28vw; height: 42vw; min-width: 100px; min-height: 150px; }
-  .port-card-center { width: 32vw; height: 48vw; min-width: 115px; min-height: 175px; }
-  .pc-event { font-size: 1.1rem; }
-  .pc-name { font-size: 0.58rem; }
-  .port-tabs { padding: 12px 20px; }
-  .ptab { padding: 6px 12px; font-size: 0.6rem; }
+
+  /* Social cards: single scrollable row, each card full readable size */
+  .port-slider {
+    padding: 20px 10px;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .port-cards {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .port-card {
+    width: calc(30vw - 8px);
+    height: calc(45vw - 8px);
+    min-width: 90px;
+    min-height: 130px;
+    border-radius: 8px;
+  }
+  .port-card-center {
+    width: calc(36vw - 8px);
+    height: calc(52vw - 8px);
+    min-width: 110px;
+    min-height: 160px;
+  }
+  .pc-event { font-size: clamp(0.7rem, 3.5vw, 1.2rem); letter-spacing: 1px; }
+  .pc-name { font-size: clamp(0.45rem, 1.8vw, 0.65rem); margin: 4px 0 2px; }
+  .pc-sub { font-size: clamp(0.4rem, 1.5vw, 0.58rem); }
+  .pc-tags { font-size: clamp(0.35rem, 1.3vw, 0.5rem); margin-top: 3px; }
+  .port-card-info { padding: 30px 8px 10px; }
+
+  .port-tabs { padding: 12px 20px; gap: 4px; }
+  .ptab { padding: 6px 10px; font-size: 0.62rem; letter-spacing: 1px; }
 }
 
 /* ══════════════════════
@@ -673,6 +718,9 @@ body {
 }
 @media (max-width: 380px) {
   .skills-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links a { font-size: 0.65rem; padding: 4px 8px; }
+  .port-card { width: calc(32vw - 6px); height: calc(48vw - 6px); }
+  .port-card-center { width: calc(38vw - 6px); height: calc(56vw - 6px); }
 }
 
 /* ══════════════════════
