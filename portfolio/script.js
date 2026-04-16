@@ -1,66 +1,60 @@
-// Navbar scroll effect
-const navbar = document.getElementById('navbar');
+// Navbar Scroll Effect
 window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
     if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
+        nav.classList.add('scrolled');
     } else {
-        navbar.classList.remove('scrolled');
+        nav.classList.remove('scrolled');
     }
 });
 
-// Scroll reveal animation
-const observerOptions = {
-    threshold: 0.1
-};
+// Reveal Animations
+const reveals = document.querySelectorAll('.reveal');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
+function reveal() {
+    for (let i = 0; i < reveals.length; i++) {
+        const windowHeight = window.innerHeight;
+        const elementTop = reveals[i].getBoundingClientRect().top;
+        const elementVisible = 150;
+        if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add('active');
         }
-    });
-}, observerOptions);
+    }
+}
 
-document.querySelectorAll('.reveal').forEach(el => {
-    observer.observe(el);
+window.addEventListener('scroll', reveal);
+window.addEventListener('load', reveal);
+
+// Testimonials Slider
+const track = document.querySelector('.testimonials-track');
+const cards = document.querySelectorAll('.testimonial-card');
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+
+let currentIndex = 0;
+
+function updateSlider() {
+    const cardWidth = cards[0].offsetWidth;
+    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+}
+
+nextBtn.addEventListener('click', () => {
+    if (currentIndex < cards.length - 1) {
+        currentIndex++;
+    } else {
+        currentIndex = 0; // Loop back
+    }
+    updateSlider();
 });
 
-// Subtle background blob movement
-const blobs = document.querySelectorAll('.blob');
-document.addEventListener('mousemove', (e) => {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
-    
-    blobs.forEach((blob, index) => {
-        const speed = (index + 1) * 20;
-        const xOffset = (x - 0.5) * speed;
-        const yOffset = (y - 0.5) * speed;
-        blob.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-    });
+prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+    } else {
+        currentIndex = cards.length - 1; // Loop to end
+    }
+    updateSlider();
 });
 
-// Smooth scroll for nav links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        e.preventDefault();
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Add staggered delay to reveal elements if they are in a grid
-document.querySelectorAll('.services-grid, .skills-grid, .timeline, .portfolio-grid').forEach(grid => {
-    const children = grid.querySelectorAll('.reveal');
-    children.forEach((child, index) => {
-        child.style.transitionDelay = `${index * 0.1}s`;
-    });
-});
+// Re-calculate slider on resize
+window.addEventListener('resize', updateSlider);
