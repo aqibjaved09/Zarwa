@@ -28,8 +28,8 @@ window.addEventListener('load', reveal);
 // Testimonials Slider
 const track = document.querySelector('.testimonials-track');
 const cards = document.querySelectorAll('.testimonial-card');
-const prevBtn = document.querySelector('.prev-btn');
-const nextBtn = document.querySelector('.next-btn');
+const prevBtns = document.querySelectorAll('.prev-btn');
+const nextBtns = document.querySelectorAll('.next-btn');
 
 let currentIndex = 0;
 
@@ -38,22 +38,26 @@ function updateSlider() {
     track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
 }
 
-nextBtn.addEventListener('click', () => {
-    if (currentIndex < cards.length - 1) {
-        currentIndex++;
-    } else {
-        currentIndex = 0; // Loop back
-    }
-    updateSlider();
+nextBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (currentIndex < cards.length - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0;
+        }
+        updateSlider();
+    });
 });
 
-prevBtn.addEventListener('click', () => {
-    if (currentIndex > 0) {
-        currentIndex--;
-    } else {
-        currentIndex = cards.length - 1; // Loop to end
-    }
-    updateSlider();
+prevBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = cards.length - 1;
+        }
+        updateSlider();
+    });
 });
 
 // Re-calculate slider on resize
